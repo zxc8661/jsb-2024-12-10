@@ -1,28 +1,30 @@
 package  com.mysql.sbb.question;
 
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import com.mysql.sbb.DataNotFoundException;
-
-
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
+import com.mysql.sbb.DataNotFoundException;
+
+import lombok.RequiredArgsConstructor;
+
 @RequiredArgsConstructor
-@Controller
-public class QuestionService{
+@Service
+public class QuestionService {
+
     private final QuestionRepository questionRepository;
 
-    public List<Question> getList(){
+    public List<Question> getList() {
         return this.questionRepository.findAll();
     }
 
-    public Question getQuestion(Integer id){
-        Optional<Question> oq = this.questionRepository.findById(id);
-        if(oq.isPresent()){
-            return oq.get();
-        }else {
+    public Question getQuestion(Integer id) {
+        Optional<Question> question = this.questionRepository.findById(id);
+        if (question.isPresent()) {
+            return question.get();
+        } else {
             throw new DataNotFoundException("question not found");
         }
     }
