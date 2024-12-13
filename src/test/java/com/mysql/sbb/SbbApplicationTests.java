@@ -5,6 +5,8 @@ import com.mysql.sbb.answer.Answer;
 import com.mysql.sbb.answer.AnswerRepository;
 import com.mysql.sbb.question.Question;
 import com.mysql.sbb.question.QuestionRepository;
+import com.mysql.sbb.question.QuestionService;
+import groovyjarjarantlr4.runtime.IntStream;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,6 +26,21 @@ public class SbbApplicationTests{
 
 	@Autowired
 	private AnswerRepository answerRepository;
+
+
+	@Autowired
+	private QuestionService questionService;
+
+
+	@Test
+	public void createTestQuestion(){
+		for(int i=0;i<300;i++){
+			String subject = String.format("테스트 데이터 %s",i);
+			String content = "내용무";
+
+			this.questionService.createQuestion(subject,content);
+		}
+	}
 	@Test
 	public void create(){
 		Question q1 = new Question();
