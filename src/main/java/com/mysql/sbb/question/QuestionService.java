@@ -1,6 +1,7 @@
 package  com.mysql.sbb.question;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,5 +28,13 @@ public class QuestionService {
         } else {
             throw new DataNotFoundException("question not found");
         }
+    }
+
+    public void createQuestion(String subject, String content){
+        Question question = new Question();
+        question.setCreateDate(LocalDateTime.now());
+        question.setSubject(subject);
+        question.setContent(content);
+        this.questionRepository.save(question);
     }
 }
