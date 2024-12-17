@@ -38,7 +38,7 @@ public class SbbApplicationTests{
 			String subject = String.format("테스트 데이터 %s",i);
 			String content = "내용무";
 
-			this.questionService.createQuestion(subject,content);
+			this.questionService.create(subject,content,null);
 		}
 	}
 	@Test
