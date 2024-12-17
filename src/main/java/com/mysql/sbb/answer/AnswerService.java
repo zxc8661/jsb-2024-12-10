@@ -15,11 +15,11 @@ import java.util.Optional;
 public class AnswerService {
     private final AnswerRepository answerRepository;
 
-    public Answer  create(Question question, String content, SiteUser author){
+    public Answer create(Question question, String content, SiteUser author) {
         Answer answer = new Answer();
-        answer.setQuestion(question);
         answer.setContent(content);
         answer.setCreateDate(LocalDateTime.now());
+        answer.setQuestion(question);
         answer.setAuthor(author);
         this.answerRepository.save(answer);
         return answer;

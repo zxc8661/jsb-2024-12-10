@@ -30,21 +30,18 @@ public class AnswerController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create/{id}")
-    public String createAnswer(Model model,
-                              @PathVariable("id") Integer id,
-                              @RequestParam(value = "content") String content,
-                              @Valid AnswerForm answerForm,
-                              BindingResult bindingResult ,
-                              Principal principal){
+    public String createAnswer(Model model, @PathVariable("id") Integer id,
+                               @Valid AnswerForm answerForm, BindingResult bindingResult, Principal principal) {
         Question question = this.questionService.getQuestion(id);
         SiteUser siteUser = this.userService.getUser(principal.getName());
-        if(bindingResult.hasErrors()){
-            model.addAttribute("question",question);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("question", question);
             return "question_detail";
         }
-        Answer answer = this.answerService.create(question,answerForm.getContent(),siteUser);
-        return String.format("redirect:/question/detail/%s@answer_%s",answer.getQuestion().getId(),
-                answer.getId());
+        Answer answer = this.answerService.create(question,
+                answerForm.getContent(), siteUser);
+        return String.format("redirect:/question/detail/%s#answer_%s",
+                answer.getQuestion().getId(), answer.getId());
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -58,10 +55,11 @@ public class AnswerController {
         return "answer_form";
     }
 
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
-    public String answerModify(@Valid AnswerForm answerForm, BindingResult bindingResult,
-                               @PathVariable("id") Integer id, Principal principal) {
+    public String answerModify(@Valid AnswerForm answerForm, @PathVariable("id") Integer id,
+                               BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "answer_form";
         }
@@ -70,9 +68,9 @@ public class AnswerController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
         this.answerService.modify(answer, answerForm.getContent());
-        return String.format("redirect:/question/detail/%s", answer.getQuestion().getId());
+        return String.format("redirect:/question/detail/%s#answer_%s",
+                answer.getQuestion().getId(), answer.getId());
     }
-
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
     public String answerDelete(Principal principal, @PathVariable("id") Integer id) {
@@ -91,7 +89,6 @@ public class AnswerController {
         SiteUser siteUser = this.userService.getUser(principal.getName());
         this.answerService.vote(answer, siteUser);
         return String.format("redirect:/question/detail/%s#answer_%s",
-                answer.getQuestion().getId(),
-                answer.getId());
+                answer.getQuestion().getId(), answer.getId());
     }
 }
